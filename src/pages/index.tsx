@@ -17,12 +17,11 @@ import { v4 as uuidv4 } from "uuid";
 const Home: NextPage = () => {
   const [groups, setGroups] = useState([{ label: "Finance Sheet 1" }]);
   const deleteGroup = (groupId: string) => {
-    // setGroups(prev => prev.filter((group) => group.))
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-100">
-      <div className="w-full my-auto p-8 md:p-36 rounded-lg flex flex-col space-y-8">
+    <div className="min-h-screen flex flex-col bg-slate-100">
+      <div className="my-auto p-4 sm:p-8 md:p-36 rounded-lg flex flex-col space-y-8">
         {groups.map((group, index) => (
           <GroupContainer key={index} label={group.label}/>
         ))}
@@ -76,12 +75,12 @@ const GroupContainer: FC<{
   
 
   return (
-    <div className="mx-auto bg-slate-50 w-full max-w-xl flex flex-col space-y-4 rounded-lg p-8">
+    <div className="mx-auto bg-slate-50 w-full max-w-xl flex flex-col space-y-4 rounded-lg p-4 d:p-8">
       <div className="flex justify-between py-4">
         <p className="text-xl font-semibold italic hover:cursor-pointer">{label}</p>
         <button className="text-red-500">Delete</button>
       </div>
-      <form className="flex flex-col space-y-2">
+      <form className="flex flex-col space-y-4">
         {listItems &&
           Object.entries(listItems).map(([index, rowValues]) => (
             <Row
@@ -111,59 +110,61 @@ const Row: FC<{
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
   return (
-    <div className="relative flex space-x-2 w-full">
-      <div onClick={() => setIsOptionsOpen(prev => !prev)} className="cursor-pointer relative my-auto text-slate-800 z-0">
+    <div className="relative flex">
+      <div onClick={() => setIsOptionsOpen(prev => !prev)} className="cursor-pointer my-auto text-slate-800 pr-3">
         &#8942;
       </div>
       { isOptionsOpen && (
-          <button onClick={() => handleDeleteRow(rowValues.rowId)} className="absolute bg-slate-50 hover:bg-red-200 p-2 -left-20 top-0 shadow-xl rounded-md z-10">
-            delete
-          </button>
-        )}
-      <input
-        onChange={(e) =>
-          handleRowChange({
-            ...rowValues,
-            name: e.target.value,
-          })
-        }
-        value={rowValues.name}
-        className="w-full p-2 border-2 bg-slate-200 rounded-lg shadow-xs"
-        placeholder="name"
-        type="text"
-      />
-      <input
-        className="p-2 border-2 bg-slate-200 rounded-lg shadow-xs"
-        placeholder={"0"}
-        type="number"
-        onChange={(e) => {
-          handleRowChange({
-            ...rowValues,
-            amount: e.target.value ? parseFloat(e.target.value) : 0,
-          });
-        }}
-        value={(() => {
-          const strVal = rowValues.amount.toString();
-          return strVal.charAt(0) === "0"
-            ? strVal.substring(0, strVal.length)
-            : strVal;
-        })()}
-      />
-      <select
-        className={clsx("p-2 rounded-lg bg-green-300 ring-0 shadow-xs", {
-          "bg-red-300 ring-0": rowValues.type === "deduct",
-        })}
-        onChange={(e) =>
-          handleRowChange({
-            ...rowValues,
-            type: e.target.value as ListItem["type"],
-          })
-        }
-        value={rowValues.type}
-      >
-        <option value="add">Add</option>
-        <option value="deduct">Deduct</option>
-      </select>
+        <button onClick={() => handleDeleteRow(rowValues.rowId)} className="absolute bg-slate-50 hover:bg-red-200 p-2 left-4 top-0 shadow-xl rounded-md z-10">
+          delete
+        </button>
+      )}
+      <div className="grid grid-flow-col grid-cols-5 grid-rows-2 md:grid-rows-1 gap-2">
+        <input
+          onChange={(e) =>
+            handleRowChange({
+              ...rowValues,
+              name: e.target.value,
+            })
+          }
+          value={rowValues.name}
+          className="col-span-5 md:col-span-2 p-2 border-2 bg-slate-200 rounded-lg shadow-xs"
+          placeholder="name"
+          type="text"
+        />
+        <input
+          className="col-span-3 md:col-span-2 p-2 border-2 bg-slate-200 rounded-lg shadow-xs"
+          placeholder={"0"}
+          type="number"
+          onChange={(e) => {
+            handleRowChange({
+              ...rowValues,
+              amount: e.target.value ? parseFloat(e.target.value) : 0,
+            });
+          }}
+          value={(() => {
+            const strVal = rowValues.amount.toString();
+            return strVal.charAt(0) === "0"
+              ? strVal.substring(0, strVal.length)
+              : strVal;
+          })()}
+        />
+        <select
+          className={clsx("col-span-2 md:col-span-1 p-2 rounded-lg bg-green-300 ring-0 shadow-xs", {
+            "bg-red-300 ring-0": rowValues.type === "deduct",
+          })}
+          onChange={(e) =>
+            handleRowChange({
+              ...rowValues,
+              type: e.target.value as ListItem["type"],
+            })
+          }
+          value={rowValues.type}
+        >
+          <option value="add">Add</option>
+          <option value="deduct">Deduct</option>
+        </select>
+      </div>
     </div>
   );
 };
