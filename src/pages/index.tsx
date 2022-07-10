@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import type { NextPage } from "next";
+import Head from "next/head";
 
 import {
   FC,
@@ -22,6 +23,10 @@ const Home: NextPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100">
+      <Head>
+        <title>Personal Finances Calculator</title>
+        
+      </Head>
       <div className="my-auto p-4 sm:p-8 md:p-36 rounded-lg flex flex-col space-y-8">
         {groups.map((group, index) => (
           <GroupContainer key={index} label={group.label} id={group.groupId} handleDeleteGroup={handleDeleteGroup}/>
