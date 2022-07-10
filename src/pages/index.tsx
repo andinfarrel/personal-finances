@@ -58,7 +58,7 @@ const GroupContainer: FC<{
   const cummulative = listVals.reduce((acc, item) => {
     if (item.type === "add") return acc + item.amount;
     return acc - item.amount;
-  }, 0);
+  }, 0).toFixed(2);
 
   const handleAddRow: MouseEventHandler<HTMLButtonElement> = () => {
     setListItems(prev => ([
